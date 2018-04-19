@@ -15,11 +15,11 @@
  *      Le programme detecte donc une tension superieure a 0.5[V] (configurable). Si c'est le cas, il allume la LED. Sinon, il l'eteint
  *      
  *  Configuration:
- *      La marge de detection est stoquee dans la variable globale {THRESHOLD} (par default 0.5[V])
+ *      La marge de detection est stockee dans la variable globale {THRESHOLD} (par default 0.5[V])
  *      La LED est branche sur le pin {ledPin} (par default PIN 2)
  *      Le pin de detection est le pin {sensorPin} (par default PIN A0)
- *      Le temps a attendre entre deux analyses du signal est stoque dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
- *      Le temps pendant laquelle la LED reste allumee en cas de detection d'un metal est stoque dans la variable globale {DETECTED_WAIT_TIME} (par default egal a 1[s])
+ *      Le temps a attendre entre deux analyses du signal est stocke dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
+ *      Le temps pendant laquelle la LED reste allumee en cas de detection d'un metal est stocke dans la variable globale {DETECTED_WAIT_TIME} (par default egal a 1[s])
  *  
  */
  
