@@ -28,7 +28,7 @@ Le programme détecte donc une tension supérieure à **0.5[V]** (configurable).
 - Adam Abazi
 - Lionel Boils
 - Jean-Baptiste Della Faille
-- Maxime Lemerle
+- [Maxime Lemerle](https://github.com/maxlem)
 - [Lorenzo Sonnino](https://github.com/lsonnino)
 - Corentin Thaon
 
