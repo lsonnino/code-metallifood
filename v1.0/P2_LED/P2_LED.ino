@@ -57,7 +57,7 @@ void loop() {
   if(sensorValue > THRESHOLD){ // Si elle est au dessus de {threshold}
     digitalWrite(ledPin, HIGH); // Allumer le LED
   }
-  else if(sensorValue < threshold){ // Sinon
+  else if(sensorValue < THRESHOLD){ // Sinon
     digitalWrite(ledPin, LOW); // Eteindre le led
   }
 
