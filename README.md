@@ -3,11 +3,11 @@
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
 ## Role:
-Il allume un LED lorsque un metal est détecté.
+Il allume une LED lorsque un metal est détecté.
 
 ## Fonctionnement:
-Lorsque un métal est détecte, un battement est produit.
-Si aucun métal n'est détecte, une tesion proche de **0[V]** est détectée.
+Lorsque un métal est détecté, un battement est produit.
+Si aucun métal n'est détecté, une tesion proche de **0[V]** est détectée.
 Cette tension n'est pas exactement de **0[V]** car il reste un bruit générant une légère tension (inférieure à **0.5[V]**).
 Un battement produit lorque un métal est détecté a une amplitude de l'ordre de **2[V]**.
 Le programme détecte donc une tension supérieure à **0.5[V]** (configurable). Si c'est le cas, il allume le LED. Sinon, il l'éteint.
