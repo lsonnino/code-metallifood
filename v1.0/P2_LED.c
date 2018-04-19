@@ -29,7 +29,8 @@ int ledPin = 2; // La LED
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
 float THRESHOLD = 100; // = 0.5 V
 
-int WAIT_TIME = 500; // Temps a attendre avant de recommencer (en millisecondes)
+int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
+int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
@@ -39,6 +40,9 @@ int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension ent
  * Configure les pin
  */
 void setup() {
+  // Vitesse d'execution
+  Serial.begin(9600);
+  
   // Configure les GPIO
   pinMode(sensorPin, INPUT); // Le {sensorPin} est une entree
   pinMode(ledPin, OUTPUT); // Le {ledPin} est une sortie
@@ -56,8 +60,10 @@ void loop() {
   // Analyser cette valeur
   if(sensorValue > THRESHOLD){ // Si elle est au dessus de {threshold}
     digitalWrite(ledPin, HIGH); // Allumer le LED
+    // Attend un certain temps avant de continuer
+    delay(DETECTED_WAIT_TIME);
   }
-  else if(sensorValue < threshold){ // Sinon
+  else if(sensorValue < THRESHOLD){ // Sinon
     digitalWrite(ledPin, LOW); // Eteindre le led
   }
 
