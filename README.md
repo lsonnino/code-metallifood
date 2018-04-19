@@ -3,7 +3,7 @@
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
 ## Role:
-Il allume une LED lorsque un metal est détecté.
+Il allume un LED lorsque un metal est détecté.
 
 ## Fonctionnement:
 Lorsque un métal est détecte, un battement est produit.
