@@ -11,12 +11,12 @@
  *      Lorsque un metal est detecte, un battement est produit.
  *      Si aucun metal est detecte, une tesion proche de O[V] est detectee.
  *      Cette tension n'est pas exactement de 0[V] car il reste un bruit generant une legere tension (inferieure a 0.5[V])
- *      Lo battement produit lorque un metal est detecte a une amplitude de l'ordre de 2[V]
- *      Le programme detecte donc une tension superieure a 0.5[V] (configurable). Si c'est le cas, il allume le LED. Sinon, il l'eteint
+ *      Lo battement est produit lorque un metal est detecte a une amplitude de l'ordre de 2[V]
+ *      Le programme detecte donc une tension superieure a 0.5[V] (configurable). Si c'est le cas, il allume la LED. Sinon, il l'eteint
  *      
  *  Configuration:
  *      La marge de detection est stoquee dans la variable globale {THRESHOLD} (par default 0.5[V])
- *      Le LED est branche sur le pin {ledPin} (par default PIN 2)
+ *      La LED est branche sur le pin {ledPin} (par default PIN 2)
  *      Le pin de detection est le pin {sensorPin} (par default PIN A0)
  *      Le temps a attendre entre deux analyses du signal est stoque dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
  *      Le temps pendant laquelle la LED reste allumee en cas de detection d'un metal est stoque dans la variable globale {DETECTED_WAIT_TIME} (par default egal a 1[s])
