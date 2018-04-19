@@ -13,11 +13,11 @@ Un battement est produit lorque un métal est détecté a une amplitude de l'ord
 Le programme détecte donc une tension supérieure à **0.5[V]** (configurable). Si c'est le cas, il allume la LED. Sinon, il l'éteint.
 
 ## Configuration:
-* La marge de détection est stoquée dans la variable globale ```THRESHOLD``` (par default **0.5[V]**).
+* La marge de détection est stockée dans la variable globale ```THRESHOLD``` (par default **0.5[V]**).
 * La LED est branche sur le pin ```ledPin``` (par default **PIN 2**)
 * Le pin de détection est le pin ```sensorPin``` (par default **PIN A0**)
-* Le temps à attendre entre deux analyses du signal est stoqué dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
-* Le temps pendant lequel la LED est gardée allumée en cas de détéction est stoqué dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
+* Le temps à attendre entre deux analyses du signal est stocké dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
+* Le temps pendant lequel la LED est gardée allumée en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
 
 # Sponsorship
 
