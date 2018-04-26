@@ -37,6 +37,7 @@
  */
 
 #include "pitches.h"
+#include "Log.cpp"
 // =========================================================
 // =                       VARIABLES                       =
 // =========================================================
@@ -214,6 +215,10 @@ boolean detected(){
   // Prends la difference de tension entre le pin {sensorPin} et le ground de l'Adruino
   // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
   sensorValue = analogRead(sensorPin);
+
+  
+  // Ecrit dans la memoire la valeur detectee
+  Log.write(sensorValue);
 
   // Si cette valeur est superieure a la marge, un metal est detecte
   return sensorValue > THRESHOLD;
