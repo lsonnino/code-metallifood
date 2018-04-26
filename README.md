@@ -3,7 +3,10 @@
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
 ## Role:
-Il allume une LED lorsque un metal est détecté.
+Lorsque le bouton est appuyé, commence la détection. La phase de détection dure (par default) deux secondes.
+Si pendant cette phase un métal est détécté, le LED rouge s'allume tant qu'un métal est à portée (ce LED attend (par default) une seconde avant de s'éteindre).
+Si le bouton est appuyé de nouveau, relance la phase de détection.
+Si pendant ce temps aucun métal n'à été détécté, le LED vert s'allume et attend (par default) une seconde avant de s'éteindre.
 
 ## Fonctionnement:
 Lorsque un métal est détecté, un battement est produit.
@@ -11,13 +14,24 @@ Si aucun métal n'est détecté, une tesion proche de **0[V]** est détectée.
 Cette tension n'est pas exactement de **0[V]** car il reste un bruit générant une légère tension (inférieure à **0.5[V]**).
 Un battement est produit lorque un métal est détecté a une amplitude de l'ordre de **2[V]**.
 Le programme détecte donc une tension supérieure à **0.5[V]** (configurable). Si c'est le cas, il allume la LED. Sinon, il l'éteint.
+Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit ouvert. Lorsque le bouton est appuyé, ces pattes passent en court circuit
 
 ## Configuration:
 * La marge de détection est stockée dans la variable globale ```THRESHOLD``` (par default **0.5[V]**).
-* La LED est branchée sur le pin ```ledPin``` (par default **PIN 2**)
+* La LED rouge est branchée sur le pin ```redLedPin``` (par default **PIN 2**)
+* La LED vert est branchée sur le pin ```greenLedPin``` (par default **PIN 3**)
 * Le pin de détection est le pin ```sensorPin``` (par default **PIN A0**)
+* Le bouton est branché sur le pin ```buttonPin``` (par default **PIN 4**)
 * Le temps à attendre entre deux analyses du signal est stocké dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
-* Le temps pendant lequel la LED est gardée allumée en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
+* Le temps pendant lequel un LED est reste allumé en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
+* La durée de la phase de détection  est stoquée dans la variable ```DETECTION_TIME``` (par default égal à **2[s]**)
+
+## Code:
+La version stable du code est disponible [ici](https://github.com/lsonnino/code-metallifood/tree/master/v2.0)
+
+# Ajouts
+* Utilisation d'un bouton pour démarrer la phase de détection
+* Code optimisé
 
 # Sponsorship
 
