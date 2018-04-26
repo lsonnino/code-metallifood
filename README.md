@@ -29,9 +29,16 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 ## Code:
 La version stable du code est disponible [ici](https://github.com/lsonnino/code-metallifood/tree/master/v2.0)
 
-# Ajouts
+# Versions
+
+## 2.0
+
 * Utilisation d'un bouton pour démarrer la phase de détection
+* Ajout du support d'un LED lorsque aucun métal n'est détécté
 * Code optimisé
+
+## 1.0
+* Utilisation d'un LED
 
 # Sponsorship
 
