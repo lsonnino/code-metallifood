@@ -1,6 +1,10 @@
 
+# Warning
+This is a development version ! A stable version can be found on the [Master branch](https://github.com/lsonnino/code-metallifood/tree/master)
+
 # Metallifood
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
+
 
 ## Role:
 Lorsque le bouton est appuyé, commence la détection. La phase de détection dure (par default) deux secondes.
