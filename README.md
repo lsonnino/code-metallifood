@@ -30,14 +30,7 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 La version stable du code est disponible [ici](https://github.com/lsonnino/code-metallifood/tree/master/v1.0)
 
 # Versions
-
-## 2.1 (en développement)
-* Un son est joué lorsqu'un metal est détécté
-
-## 2.0 (en développement)
-* Utilisation d'un bouton pour démarrer la phase de détection
-* Ajout du support d'un LED lorsque aucun métal n'est détécté
-* Code optimisé
+Une version **en développement** peut être trouvée [ici](https://github.com/lsonnino/code-metallifood/tree/dev)
 
 ## 1.0
 * Un LED s'allume lorsque un métal est détécté
