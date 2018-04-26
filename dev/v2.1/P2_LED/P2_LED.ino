@@ -35,6 +35,11 @@
  *      La duree de la phase de detection est stoquee dans la variable {DETECTION_TIME} (par default egal a 2[s])
  *  
  */
+
+#include "pitches.h"
+// =========================================================
+// =                       VARIABLES                       =
+// =========================================================
  
 // GPIO
 const byte sensorPin = A0; // La ou on lis la tension
@@ -62,6 +67,19 @@ int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension ent
 int detectionIterations = 0; // Le nombre de fois que la fonction {loop()} est appellee
 boolean pressedButton = false; // Si on est en phase de detection
 
+// Variables necessaires pour lire l'etat du bouton
+// Necessaires pour corriger l'effet "debounce" des bouttons
+// Pour plus d'informations, lire ici: https://www.arduino.cc/en/Tutorial/Debounce
+int buttonState;             // L'etat du bouton
+int lastButtonState = LOW;   // L'etat du bouton lors de la derniere alanyse
+// Ces temps risquent de vite prendre des grandes valeurs
+unsigned long lastDebounceTime = 0;  // La derniere fois que le bouton a ete appuye
+unsigned long debounceDelay = 50;    // Le temps de "debounce"
+
+// =========================================================
+// =                        METHODES                       =
+// =========================================================
+
 /**
  * Methode lancee a l'allumage
  * Configure les pin
@@ -82,12 +100,12 @@ void setup() {
  * Analyse le signal recupere
  */
 void loop() {
-  byte instruction = instruction(); // Regarde ce qu'il doit faire
-  if(instruction == NONE){ // Si il ne doit rien faire, ne fait rien
+  byte currentInstruction = instruction(); // Regarde ce qu'il doit faire
+  if(currentInstruction == NONE){ // Si il ne doit rien faire, ne fait rien
     wait();
     return;
   }
-  else if(instruction == RESTART_ITERARIONS){ // Recommence les iterations a 0
+  else if(currentInstruction == RESTART_ITERATIONS){ // Recommence les iterations a 0
     resetIterations();
     pressedButton = true;
   }
@@ -101,7 +119,7 @@ void loop() {
     digitalWrite(redLedPin, HIGH); // Allumer le LED rouge
     detectedSound(); // Joue un son
     
-    while(detected(){ // Tant qu'un metal est detecte
+    while(detected()){ // Tant qu'un metal est detecte
       // Attend un certain temps avant de continuer
       delay(DETECTED_WAIT_TIME);
     }
@@ -122,6 +140,39 @@ void loop() {
 }
 
 /**
+ * Renvoie {true} si le bouton a ete appuye.
+ * 
+ * Pour des raisons mecaniques, lorsque le bouton est appuye, un signal impropre est parfois renvoye.
+ * Cette methode corrige ce probleme
+ * 
+ * Ce code est une version adaptee du code disponible ici: https://www.arduino.cc/en/Tutorial/Debounce
+ */
+boolean isButtonPressed(){
+  // Lis la valeur renvoyee par le bouton
+  int reading = digitalRead(buttonPin);
+
+  // Regarde si le boutton a ete presse et ignore le bruit genere par le bouton
+
+  // Si l'etat du bouton change a cause du bruit genere par le bouton:
+  if (reading != lastButtonState) {
+    // Reset le timer
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // Si lle bouton n'a pas change d'etat depuis un certain temps,
+    // prend cette valeur comme etat l'etat du bouton
+
+    // Si l'etat du bouton a change
+    if (reading != buttonState) {
+      buttonState = reading;
+    }
+  }
+
+  return buttonState == HIGH;
+}
+
+/**
  * Regarde ce qu'il doit faire
  * Renvoie
  *    {RESTART_ITERATIONS} si la phase de detection doit recommencer
@@ -130,7 +181,7 @@ void loop() {
  */
 byte instruction(){
   // Si le boutin est appuye, recommence la phase de detection
-  if(digitalRead(buttonPin)){
+  if(isButtonPressed()){
     return RESTART_ITERATIONS;
   }
   // Sinon,
