@@ -24,14 +24,14 @@
  */
  
 // GPIO
-int sensorPin = A0; // La ou on lis la tension
-int ledPin = 2; // La LED
+const int sensorPin = A0; // La ou on lis la tension
+const int ledPin = 2; // La LED
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-float THRESHOLD = 100; // = 0.5 V
+const float THRESHOLD = 100; // = 0.5 V
 
-int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
-int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
+const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
+const int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
