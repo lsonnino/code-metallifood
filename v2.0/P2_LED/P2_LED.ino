@@ -25,22 +25,22 @@
  */
  
 // GPIO
-const int sensorPin = A0; // La ou on lis la tension
-const int buttonPin = 4; // Le bouton
-const int redLedPin = 2; // Le LED rouge
-const int greenLedPin = 3; // Le LED vert
+const byte sensorPin = A0; // La ou on lis la tension
+const byte buttonPin = 4; // Le bouton
+const byte redLedPin = 2; // Le LED rouge
+const byte greenLedPin = 3; // Le LED vert
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-const float THRESHOLD = 100; // = 0.5 V
+const short THRESHOLD = 100; // = 0.5 V
 
 const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
 const int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
 const int DETECTION_TIME = 1000;
 const int MAX_DETECTION_ITERATIONS = DETECTION_TIME/WAIT_TIME;
 
-const int RESTART_ITERATIONS = 1;
-const int CONTINUE = 0;
-const int NONE = -1;
+const byte RESTART_ITERATIONS = 1;
+const byte CONTINUE = 0;
+const byte NONE = -1;
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
@@ -67,7 +67,7 @@ void setup() {
  * Analyse le signal recu
  */
 void loop() {
-  int instruction = instruction();
+  byte instruction = instruction();
   if(instruction == NONE){
     wait();
     return;
