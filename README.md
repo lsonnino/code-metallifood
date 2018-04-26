@@ -35,6 +35,9 @@ La version stable du code est disponible [ici](https://github.com/lsonnino/code-
 
 # Versions
 
+## 2.2 (en développement)
+* L'historique de détection est sauvegardée dans la mémoire à long terme de l'Arduino
+
 ## 2.1 (en développement)
 * Un son est joué lorsqu'un metal est détécté
 
