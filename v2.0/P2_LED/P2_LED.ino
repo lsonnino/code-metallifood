@@ -117,7 +117,7 @@ void resetIterations(){
   digitalWrite(greenLedPin, LOW); // Eteindre le led
 }
 
-int instruction(){
+byte instruction(){
   if(digitalRead(buttonPin)){
     return RESTART_ITERATIONS;
   }
