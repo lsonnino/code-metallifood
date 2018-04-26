@@ -6,35 +6,58 @@
  *  Ce code est le code de l'Adruino contenu dans le paquet Metallifood
  *  
  *  Role:
- *      Il allume une LED lorsque un metal est detecte
+ *      Lorsque le bouton est appuye, commence la detection. La phase de detection dure (par default) deux secondes.
+ *      Si pendant cette phase un metal est detecte, le LED rouge s'allume tant qu'un metal est a portee (ce LED attend (par default) une seconde avant de s'eteindre).
+ *      Si le bouton est appuye de nouveau, relance la phase de detection.
+ *      Si pendant ce temps aucun metal n'a ete detecte, le LED vert s'allume et attend (par default) une seconde avant de s'eteindre.
+ *      
  *  Fonctionnement:
  *      Lorsque un metal est detecte, un battement est produit.
  *      Si aucun metal est detecte, une tesion proche de O[V] est detectee.
  *      Cette tension n'est pas exactement de 0[V] car il reste un bruit generant une legere tension (inferieure a 0.5[V])
  *      Lo battement est produit lorque un metal est detecte a une amplitude de l'ordre de 2[V]
  *      Le programme detecte donc une tension superieure a 0.5[V] (configurable). Si c'est le cas, il allume la LED. Sinon, il l'eteint
+ *      Enfin, lorsque le bouton n'est appuye pas, les pattes du bouton sont en circuit ouvert. Lorsque le bouton est appuye, ces pattes passent en court circuit
  *      
  *  Configuration:
  *      La marge de detection est stockee dans la variable globale {THRESHOLD} (par default 0.5[V])
- *      La LED est branchee sur le pin {ledPin} (par default PIN 2)
+ *      
+ *      Le LED rouge est branchee sur le pin {redLedPin} (par default PIN 2)
+ *      Le LED vert est branchee sur le pin {greenLedPin} (par default PIN 3)
  *      Le pin de detection est le pin {sensorPin} (par default PIN A0)
+ *      Le bouton est branche sur le le pin {buttonPin} (par default PIN 4)
+ *      
  *      Le temps a attendre entre deux analyses du signal est stocke dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
- *      Le temps pendant laquelle la LED reste allumee en cas de detection d'un metal est stocke dans la variable globale {DETECTED_WAIT_TIME} (par default egal a 1[s])
+ *      Le temps pendant laquelle un LED reste allumee est stocke dans la variable globale
+ *          {DETECTED_WAIT_TIME} (par default egal a 1[s])
+ *      La duree de la phase de detection est stoquee dans la variable {DETECTION_TIME} (par default egal a 2[s])
  *  
  */
  
 // GPIO
-int sensorPin = A0; // La ou on lis la tension
-int ledPin = 2; // La LED
+const byte sensorPin = A0; // La ou on lis la tension
+const byte buttonPin = 4; // Le bouton
+const byte redLedPin = 2; // Le LED rouge
+const byte greenLedPin = 3; // Le LED vert
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-float THRESHOLD = 100; // = 0.5 V
+const short THRESHOLD = 100; // = 0.5 V
 
-int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
-int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
+// Durees
+const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
+const int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
+const int DETECTION_TIME = 2000; // La duree de la phase de detection (en millisecondes)
+const int MAX_DETECTION_ITERATIONS = DETECTION_TIME / WAIT_TIME; // Le nombre de fois que la fonction {loop()} est appellee avant de considerer la phase de detection finie
+
+// Consignes pour la phase de detection
+const byte RESTART_ITERATIONS = 1; // Recommencer la phase de detection
+const byte CONTINUE = 0; // Continuer la phase de detection
+const byte NONE = -1; // Ne rien faire
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
+int detectionIterations = 0; // Le nombre de fois que la fonction {loop()} est appellee
+boolean pressedButton = false; // Si on est en phase de detection
 
 /**
  * Methode lancee a l'allumage
@@ -46,28 +69,106 @@ void setup() {
   
   // Configure les GPIO
   pinMode(sensorPin, INPUT); // Le {sensorPin} est une entree
-  pinMode(ledPin, OUTPUT); // Le {ledPin} est une sortie
+  pinMode(buttonPin, INPUT); // Le {buttonPin} est une entree
+  pinMode(redLedPin, OUTPUT); // Le {redLedPin} est une sortie
+  pinMode(greenLedPin, OUTPUT); // Le {greenLedPin} est une sortie
 }
 
 /**
  * Methode executee en continu
- * Analyse le signal recu
+ * Analyse le signal recupere
  */
 void loop() {
+  byte instruction = instruction(); // Regarde ce qu'il doit faire
+  if(instruction == NONE){ // Si il ne doit rien faire, ne fait rien
+    wait();
+    return;
+  }
+  else if(instruction == RESTART_ITERARIONS){ // Recommence les iterations a 0
+    resetIterations();
+    pressedButton = true;
+  }
+  else { // if iteration == CONTINUE
+        // Augmente les iterations et continue
+    detectionIterations++;
+  }
+  
+  // Analyser la detection
+  if(detected()){ // Si elle est au dessus de {threshold}
+    digitalWrite(redLedPin, HIGH); // Allumer le LED rouge
+    
+    while(detected(){ // Tant qu'un metal est detecte
+      // Attend un certain temps avant de continuer
+      delay(DETECTED_WAIT_TIME);
+    }
+
+    // Recommence les iterations
+    resetIterations();
+  }
+  else if(detectionIterations == MAX_DETECTION_ITERATIONS){ // Si aucun metal n'a ete detecte pendant la phase de detection
+    digitalWrite(greenLedPin, HIGH); // Allumer le LED vert
+    // Attend un certain temps avant de continuer
+    delay(DETECTED_WAIT_TIME);
+    // Recommence les iterations
+    resetIterations();
+  }
+
+  // Attendre un certain temps avant de recommencer
+  wait();
+}
+
+/**
+ * Regarde ce qu'il doit faire
+ * Renvoie
+ *    {RESTART_ITERATIONS} si la phase de detection doit recommencer
+ *    {CONTINUE} si les iterations doivent continuer
+ *    {NONE} si rien ne doit etre  fait
+ */
+byte instruction(){
+  // Si le boutin est appuye, recommence la phase de detection
+  if(digitalRead(buttonPin)){
+    return RESTART_ITERATIONS;
+  }
+  // Sinon,
+  // Si le bouton a deja ete appuye, continue la detection
+  else if(pressedButton){
+    return CONTINUE;
+  }
+  // Sinon,
+  // Ne fait rien
+  return NONE;
+}
+
+/**
+ * Recommence les iterations a 0
+ */
+void resetIterations(){
+  // Recommence les iterations
+  pressedButton = false;
+  detectionIterations = 0;
+  // Eteint les LED
+  digitalWrite(redLedPin, LOW); // Eteindre le led
+  digitalWrite(greenLedPin, LOW); // Eteindre le led
+}
+
+/**
+ * Detecte un metal
+ * Renvoie {true} si un metal est detecte, renvoie {false sinon}
+ */
+boolean detected(){
   // Prends la difference de tension entre le pin {sensorPin} et le ground de l'Adruino
   // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
   sensorValue = analogRead(sensorPin);
 
-  // Analyser cette valeur
-  if(sensorValue > THRESHOLD){ // Si elle est au dessus de {threshold}
-    digitalWrite(ledPin, HIGH); // Allumer le LED
-    // Attend un certain temps avant de continuer
-    delay(DETECTED_WAIT_TIME);
-  }
-  else if(sensorValue < THRESHOLD){ // Sinon
-    digitalWrite(ledPin, LOW); // Eteindre le led
-  }
+  // Si cette valeur est superieure a la marge, un metal est detecte
+  return sensorValue > THRESHOLD;
+}
 
-  // Attendre un certain temps avant de recommencer
+/**
+ * Attend un certain temps avant de recommencer la methode {loop()}
+ */
+void wait(){
+  // Ce temps peut etre optimise dans cette methode
   delay(WAIT_TIME);
 }
+
