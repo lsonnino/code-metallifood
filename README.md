@@ -31,14 +31,16 @@ La version stable du code est disponible [ici](https://github.com/lsonnino/code-
 
 # Versions
 
-## 2.0
+## 2.1 (en développement)
+* Un son est joué lorsqu'un metal est détécté
 
+## 2.0 (en développement)
 * Utilisation d'un bouton pour démarrer la phase de détection
 * Ajout du support d'un LED lorsque aucun métal n'est détécté
 * Code optimisé
 
 ## 1.0
-* Utilisation d'un LED
+* Un LED s'allume lorsque un métal est détécté
 
 # Sponsorship
 
