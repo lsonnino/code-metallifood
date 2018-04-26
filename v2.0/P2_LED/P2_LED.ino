@@ -30,7 +30,7 @@
  *      Le temps a attendre entre deux analyses du signal est stocke dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
  *      Le temps pendant laquelle un LED reste allumee est stocke dans la variable globale
  *          {DETECTED_WAIT_TIME} (par default egal a 1[s])
- *      La duree de la phase de detectio  est stoquee dans la variable {DETECTION_TIME} (par default egal a 2[s])
+ *      La duree de la phase de detection est stoquee dans la variable {DETECTION_TIME} (par default egal a 2[s])
  *  
  */
  
