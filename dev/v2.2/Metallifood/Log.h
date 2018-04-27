@@ -6,6 +6,7 @@
 #ifndef Log
 #define Log
 
+#include <EEPROM.h>
 
 // methodes
 void nextAddress();
