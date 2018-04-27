@@ -24,7 +24,7 @@
  */
  
 // GPIO
-int sensorPin = A0; // La ou on lis la tension
+int sensorPin = A0; // La ou on lit la tension
 int ledPin = 2; // La LED
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
