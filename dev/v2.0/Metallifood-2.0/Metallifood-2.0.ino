@@ -70,7 +70,7 @@ int buttonState;             // L'etat du bouton
 int lastButtonState = LOW;   // L'etat du bouton lors de la derniere alanyse
 // Ces temps risquent de vite prendre des grandes valeurs
 unsigned long lastDebounceTime = 0;  // La derniere fois que le bouton a ete appuye
-unsigned long debounceDelay = 50;    // Le temps de "debounce"
+unsigned long debounceDelay = 70;    // Le temps de "debounce"
 
 // =========================================================
 // =                        METHODES                       =
@@ -98,7 +98,7 @@ void setup() {
 void loop() {
   byte currentInstruction = instruction(); // Regarde ce qu'il doit faire
   if(currentInstruction == NONE){ // Si il ne doit rien faire, ne fait rien
-    wait();
+    //wait();
     return;
   }
   else if(currentInstruction == RESTART_ITERATIONS){ // Recommence les iterations a 0
@@ -150,18 +150,16 @@ boolean isButtonPressed(){
 
   // Si l'etat du bouton change a cause du bruit genere par le bouton:
   if (reading != lastButtonState) {
+    lastButtonState = reading;
     // Reset le timer
     lastDebounceTime = millis();
+    return false;
   }
 
   if ((millis() - lastDebounceTime) > debounceDelay) {
-    // Si lle bouton n'a pas change d'etat depuis un certain temps,
+    // Si le bouton n'a pas change d'etat depuis un certain temps,
     // prend cette valeur comme etat l'etat du bouton
-
-    // Si l'etat du bouton a change
-    if (reading != buttonState) {
-      buttonState = reading;
-    }
+    buttonState = reading;
   }
 
   return buttonState == HIGH;
@@ -222,3 +220,30 @@ void wait(){
   delay(WAIT_TIME);
 }
 
+/**
+ *  
+ *  Donne la distance entre le capteur de proximite et l'obstacle le plus proche
+ *  
+ **/
+int getDistance(int triggerPin, int echoPin){
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  long duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  return duration*0.034/2;
+}
+
+/**
+ *  
+ *  Renvoie {true} si la distance entre le capteur de proximite et
+ *  l'obstacle le plus proche est inferieure a {distance}
+ *  
+ **/
+boolean isObstacle(int triggerPin, int echoPin, int distance){
+  return getDistance(triggerPin, echoPin) <= distance;
+}
