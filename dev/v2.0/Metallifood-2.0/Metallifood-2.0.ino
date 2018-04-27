@@ -50,7 +50,7 @@ const short THRESHOLD = 100; // = 0.5 V
 // Durees
 const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
 const int DETECTED_WAIT_TIME = 1000; // Temps a attendre apres qu'un metal aie ete detecte (en millisecondes)
-const int DETECTION_TIME = 2000; // La duree de la phase de detection (en millisecondes)
+const int DETECTION_TIME = 1000; // La duree de la phase de detection (en millisecondes)
 const int MAX_DETECTION_ITERATIONS = DETECTION_TIME / WAIT_TIME; // Le nombre de fois que la fonction {loop()} est appellee avant de considerer la phase de detection finie
 
 // Consignes pour la phase de detection
@@ -63,14 +63,6 @@ int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension ent
 int detectionIterations = 0; // Le nombre de fois que la fonction {loop()} est appellee
 boolean pressedButton = false; // Si on est en phase de detection
 
-// Variables necessaires pour lire l'etat du bouton
-// Necessaires pour corriger l'effet "debounce" des bouttons
-// Pour plus d'informations, lire ici: https://www.arduino.cc/en/Tutorial/Debounce
-int buttonState;             // L'etat du bouton
-int lastButtonState = LOW;   // L'etat du bouton lors de la derniere alanyse
-// Ces temps risquent de vite prendre des grandes valeurs
-unsigned long lastDebounceTime = 0;  // La derniere fois que le bouton a ete appuye
-unsigned long debounceDelay = 70;    // Le temps de "debounce"
 
 // =========================================================
 // =                        METHODES                       =
@@ -104,6 +96,7 @@ void loop() {
   else if(currentInstruction == RESTART_ITERATIONS){ // Recommence les iterations a 0
     resetIterations();
     pressedButton = true;
+    Serial.println("pressed");
   }
   else { // if iteration == CONTINUE
         // Augmente les iterations et continue
@@ -113,17 +106,18 @@ void loop() {
   // Analyser la detection
   if(detected()){ // Si elle est au dessus de {threshold}
     digitalWrite(redLedPin, HIGH); // Allumer le LED rouge
-    
+    Serial.println("metal");
     while(detected()){ // Tant qu'un metal est detecte
       // Attend un certain temps avant de continuer
       delay(DETECTED_WAIT_TIME);
     }
-
+    
     // Recommence les iterations
     resetIterations();
   }
   else if(detectionIterations == MAX_DETECTION_ITERATIONS){ // Si aucun metal n'a ete detecte pendant la phase de detection
     digitalWrite(greenLedPin, HIGH); // Allumer le LED vert
+    Serial.println("nothing");
     // Attend un certain temps avant de continuer
     delay(DETECTED_WAIT_TIME);
     // Recommence les iterations
@@ -140,29 +134,28 @@ void loop() {
  * Pour des raisons mecaniques, lorsque le bouton est appuye, un signal impropre est parfois renvoye.
  * Cette methode corrige ce probleme
  * 
- * Ce code est une version adaptee du code disponible ici: https://www.arduino.cc/en/Tutorial/Debounce
  */
 boolean isButtonPressed(){
-  // Lis la valeur renvoyee par le bouton
-  int reading = digitalRead(buttonPin);
+  int iterations = 0;
+  int maxIt = 100;
+  int tried = 0;
 
-  // Regarde si le boutton a ete presse et ignore le bruit genere par le bouton
+  while(iterations < maxIt){
+    if(digitalRead(buttonPin) == HIGH){
+      iterations++;
+    }
+    else {
+      tried++;
+      if(tried > maxIt){
+        return false;
+      }
+      iterations = 0;
+    }
 
-  // Si l'etat du bouton change a cause du bruit genere par le bouton:
-  if (reading != lastButtonState) {
-    lastButtonState = reading;
-    // Reset le timer
-    lastDebounceTime = millis();
-    return false;
+    delay(1);
   }
 
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    // Si le bouton n'a pas change d'etat depuis un certain temps,
-    // prend cette valeur comme etat l'etat du bouton
-    buttonState = reading;
-  }
-
-  return buttonState == HIGH;
+  return true;
 }
 
 /**
@@ -225,6 +218,8 @@ void wait(){
  *  Donne la distance entre le capteur de proximite et l'obstacle le plus proche
  *  
  **/
+ // ============================
+ // ============================
 int getDistance(int triggerPin, int echoPin){
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
@@ -235,7 +230,7 @@ int getDistance(int triggerPin, int echoPin){
   // Reads the echoPin, returns the sound wave travel time in microseconds
   long duration = pulseIn(echoPin, HIGH);
   // Calculating the distance
-  return duration*0.034/2;
+  return duration * 0.034 / 2;
 }
 
 /**
