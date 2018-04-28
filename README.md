@@ -25,7 +25,7 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 * La LED rouge est branchée sur le pin ```redLedPin``` (par default **PIN 2**)
 * La LED vert est branchée sur le pin ```greenLedPin``` (par default **PIN 3**)
 * Le pin de détection est le pin ```sensorPin``` (par default **PIN A0**)
-* Le bouton est branché sur le pin ```buttonPin``` (par default **PIN 4**)
+* Le bouton est branché sur le pin ```buttonPin``` (par default **PIN A4**)
 * Le temps à attendre entre deux analyses du signal est stocké dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
 * Le temps pendant lequel un LED est reste allumé en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
 * La durée de la phase de détection  est stoquée dans la variable ```DETECTION_TIME``` (par default égal à **2[s]**)
