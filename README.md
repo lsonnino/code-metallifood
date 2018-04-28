@@ -11,6 +11,7 @@ Lorsque le bouton est appuyé, commence la détection. La phase de détection du
 Si pendant cette phase un métal est détécté, le LED rouge s'allume tant qu'un métal est à portée (ce LED attend (par default) une seconde avant de s'éteindre).
 Si le bouton est appuyé de nouveau, relance la phase de détection.
 Si pendant ce temps aucun métal n'à été détécté, le LED vert s'allume et attend (par default) une seconde avant de s'éteindre.
+Un son est également joué pour appuyer les signaux lumineux.
 
 ## Fonctionnement:
 Lorsque un métal est détecté, un battement est produit.
@@ -26,9 +27,11 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 * La LED vert est branchée sur le pin ```greenLedPin``` (par default **PIN 3**)
 * Le pin de détection est le pin ```sensorPin``` (par default **PIN A0**)
 * Le bouton est branché sur le pin ```buttonPin``` (par default **PIN A4**)
+* Le buzzer est branché sur le pin ```buzzerPin``` (par default **PIN 8**)
 * Le temps à attendre entre deux analyses du signal est stocké dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
 * Le temps pendant lequel un LED est reste allumé en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
 * La durée de la phase de détection  est stoquée dans la variable ```DETECTION_TIME``` (par default égal à **2[s]**)
+* Les mélodies jouées sont stoquées dans des variables également configurables
 
 ## Code:
 La version stable du code est disponible [ici](https://github.com/lsonnino/code-metallifood/tree/master/v1.0)
@@ -38,10 +41,10 @@ La version stable du code est disponible [ici](https://github.com/lsonnino/code-
 ## 2.2 (en développement)
 * L'historique de détection est sauvegardée dans la mémoire à long terme de l'Arduino
 
-## 2.1 (en développement)
-* Un son est joué lorsqu'un metal est détécté
+## 2.1
+* Un son est joué pour appuyer les signaux lumineux
 
-## 2.0 (en développement)
+## 2.0
 * Utilisation d'un bouton pour démarrer la phase de détection
 * Ajout du support d'un LED lorsque aucun métal n'est détécté
 * Code optimisé

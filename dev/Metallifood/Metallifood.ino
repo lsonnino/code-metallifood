@@ -79,7 +79,7 @@ const int detectedSound[] = {
 const int nothingSound[] = {
    NOTE_C4
 };
-const int boumboumtamtamSound[] = {
+const int startupSound[] = {
    NOTE_E3, NOTE_C4, NOTE_B3, NOTE_C4, NOTE_E4, NOTE_C4, NOTE_A3, NOTE_E3
 };
 // Notes
@@ -93,7 +93,7 @@ const int detectedDuration[] = {
 const int nothingDuration[] = {
   4
 };
-const int boumboumtamtamDuration[] = {
+const int startupDuration[] = {
   4, 4, 5, 6, 6, 6, 5, 4
 };
 
@@ -101,7 +101,7 @@ const int boumboumtamtamDuration[] = {
 const int detectionPhaseSize = 2;
 const int detectedSize = 4;
 const int nothingSize = 1;
-const int boumboumtamtamSize = 8;
+const int startupSize = 8;
 
 // =========================================================
 // =                        METHODES                       =
@@ -122,7 +122,7 @@ void setup() {
   pinMode(greenLedPin, OUTPUT); // Le {greenLedPin} est une sortie
   pinMode(buzzerPin, OUTPUT); // Le {buzzerPin} est une sortie
 
-  playSound(boumboumtamtamSound, boumboumtamtamDuration, boumboumtamtamSize);
+  playSound(startupSound, startupDuration, startupSize);
   //playSound(detectedSound, detectedDuration);
 }
 
