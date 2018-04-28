@@ -1,6 +1,10 @@
 
+# Attention
+Ceci est un code en **développement**. Une version **stable** du code peut être trouvée sur la [Master branch](https://github.com/lsonnino/code-metallifood/tree/master)
+
 # Metallifood
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
+
 
 ## Role:
 Lorsque le bouton est appuyé, commence la détection. La phase de détection dure (par default) deux secondes.
@@ -21,7 +25,7 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 * La LED rouge est branchée sur le pin ```redLedPin``` (par default **PIN 2**)
 * La LED vert est branchée sur le pin ```greenLedPin``` (par default **PIN 3**)
 * Le pin de détection est le pin ```sensorPin``` (par default **PIN A0**)
-* Le bouton est branché sur le pin ```buttonPin``` (par default **PIN 4**)
+* Le bouton est branché sur le pin ```buttonPin``` (par default **PIN A4**)
 * Le temps à attendre entre deux analyses du signal est stocké dans la variable globale ```WAIT_TIME``` (par default egal a **50[ms]**)
 * Le temps pendant lequel un LED est reste allumé en cas de détéction est stocké dans la variable globale ```DETECTED_WAIT_TIME``` (par default egal a **1[s]**)
 * La durée de la phase de détection  est stoquée dans la variable ```DETECTION_TIME``` (par default égal à **2[s]**)
@@ -30,7 +34,17 @@ Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit
 La version stable du code est disponible [ici](https://github.com/lsonnino/code-metallifood/tree/master/v1.0)
 
 # Versions
-Une version **en développement** peut être trouvée [ici](https://github.com/lsonnino/code-metallifood/tree/dev)
+
+## 2.2 (en développement)
+* L'historique de détection est sauvegardée dans la mémoire à long terme de l'Arduino
+
+## 2.1 (en développement)
+* Un son est joué lorsqu'un metal est détécté
+
+## 2.0 (en développement)
+* Utilisation d'un bouton pour démarrer la phase de détection
+* Ajout du support d'un LED lorsque aucun métal n'est détécté
+* Code optimisé
 
 ## 1.0
 * Un LED s'allume lorsque un métal est détécté
