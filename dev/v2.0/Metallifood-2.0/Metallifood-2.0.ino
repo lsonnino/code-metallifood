@@ -6,7 +6,7 @@
  *  Ce code est le code de l'Adruino contenu dans le paquet Metallifood
  *  
  *  Role:
- *      Lorsque le bouton est appuye, commence la detection. La phase de detection dure (par default) deux secondes.
+ *      Lorsque le bouton est appuye, fait clignotter les LED et commence la detection. La phase de detection dure (par default) deux secondes.
  *      Si pendant cette phase un metal est detecte, le LED rouge s'allume tant qu'un metal est a portee (ce LED attend (par default) une seconde avant de s'eteindre).
  *      Si le bouton est appuye de nouveau, relance la phase de detection.
  *      Si pendant ce temps aucun metal n'a ete detecte, le LED vert s'allume et attend (par default) une seconde avant de s'eteindre.
