@@ -10,6 +10,7 @@
  *      Si pendant cette phase un metal est detecte, le LED rouge s'allume tant qu'un metal est a portee (ce LED attend (par default) une seconde avant de s'eteindre).
  *      Si le bouton est appuye de nouveau, relance la phase de detection.
  *      Si pendant ce temps aucun metal n'a ete detecte, le LED vert s'allume et attend (par default) une seconde avant de s'eteindre.
+ *      Joue un son en fonction du resultat de la detection
  *      
  *  Fonctionnement:
  *      Lorsque un metal est detecte, un battement est produit.
@@ -26,6 +27,7 @@
  *      Le LED vert est branchee sur le pin {greenLedPin} (par default PIN 3)
  *      Le pin de detection est le pin {sensorPin} (par default PIN A0)
  *      Le bouton est branche sur le le pin {buttonPin} (par default PIN A4)
+ *      Le buzzer est branche sur le pin {buzzerPin} (par default PIN 8)
  *      
  *      Le temps a attendre entre deux analyses du signal est stocke dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
  *      Le temps pendant laquelle un LED reste allumee est stocke dans la variable globale
@@ -33,6 +35,8 @@
  *      La duree de la phase de detection est stoquee dans la variable {DETECTION_TIME} (par default egal a 2[s])
  *  
  */
+
+#include "pitches.h"
 
 // =========================================================
 // =                       VARIABLES                       =
@@ -43,6 +47,7 @@ const byte sensorPin = A0; // La ou on lis la tension
 const byte buttonPin = A4; // Le bouton
 const byte redLedPin = 2; // Le LED rouge
 const byte greenLedPin = 3; // Le LED vert
+const byte buzzerPin = 8; // Le buzzer
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
 const short THRESHOLD = 100; // 100 = 0.5 V
@@ -63,6 +68,40 @@ int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension ent
 int detectionIterations = 0; // Le nombre de fois que la fonction {loop()} est appellee
 boolean pressedButton = false; // Si on est en phase de detection
 
+// Buzzer
+// Melodies
+const int detectionPhaseSound[] = {
+  NOTE_B3, NOTE_B3
+};
+const int detectedSound[] = {
+   NOTE_C4, NOTE_G3, NOTE_C4, NOTE_G3
+};
+const int nothingSound[] = {
+   NOTE_C4
+};
+const int startupSound[] = {
+   NOTE_E3, NOTE_C4, NOTE_B3, NOTE_C4, NOTE_E4, NOTE_C4, NOTE_A3, NOTE_E3
+};
+// Notes
+// duree des notes: 4 = noire, 8 = croche, etc.:
+const int detectionPhaseDuration[] = {
+  8, 8
+};
+const int detectedDuration[] = {
+  4, 4, 4, 4
+};
+const int nothingDuration[] = {
+  4
+};
+const int startupDuration[] = {
+  4, 4, 5, 6, 6, 6, 5, 4
+};
+
+// Sizes
+const int detectionPhaseSize = 2;
+const int detectedSize = 4;
+const int nothingSize = 1;
+const int startupSize = 8;
 
 // =========================================================
 // =                        METHODES                       =
@@ -81,6 +120,10 @@ void setup() {
   pinMode(buttonPin, INPUT); // Le {buttonPin} est une entree
   pinMode(redLedPin, OUTPUT); // Le {redLedPin} est une sortie
   pinMode(greenLedPin, OUTPUT); // Le {greenLedPin} est une sortie
+  pinMode(buzzerPin, OUTPUT); // Le {buzzerPin} est une sortie
+
+  playSound(startupSound, startupDuration, startupSize);
+  //playSound(detectedSound, detectedDuration);
 }
 
 /**
@@ -98,6 +141,7 @@ void loop() {
     pressedButton = true;
     Serial.println("Button pressed");
     paramLed();
+    playSound(detectionPhaseSound, detectionPhaseDuration, detectionPhaseSize);
   }
   else { // if iteration == CONTINUE
         // Augmente les iterations et continue
@@ -108,6 +152,7 @@ void loop() {
   if(detected()){ // Si elle est au dessus de {threshold}
     digitalWrite(redLedPin, HIGH); // Allumer le LED rouge
     Serial.println("metal  detected");
+    playSound(detectedSound, detectedDuration, detectedSize);
     while(detected()){ // Tant qu'un metal est detecte
       // Attend un certain temps avant de continuer
       delay(DETECTED_WAIT_TIME);
@@ -119,6 +164,7 @@ void loop() {
   }
   else if(detectionIterations == MAX_DETECTION_ITERATIONS){ // Si aucun metal n'a ete detecte pendant la phase de detection
     digitalWrite(greenLedPin, HIGH); // Allumer le LED vert
+    playSound(nothingSound, nothingDuration, nothingSize);
     Serial.println("nothing detected");
     // Attend un certain temps avant de continuer
     delay(DETECTED_WAIT_TIME);
@@ -217,14 +263,44 @@ void wait(){
   delay(WAIT_TIME);
 }
 
+/**
+ * 
+ * Cette methode est basee sur l'exemple Arduino pour jouer une melodie
+ * Elle joue la melodie {melody} en sachant que chaque note dure {noteDurations[i]}
+ * 
+ */
+void playSound(int melody[], int noteDurations[], int melodySize){
+  // Prends chaque note de la melodie:
+  for (int note = 0; note < melodySize; note++) {
+
+    // La duree de chaque note est egale a 1000/noteDurations[thisNote] [ms]
+    int noteDuration = 1000 / noteDurations[note];
+    tone(buzzerPin, melody[note], noteDuration);
+
+    // Pour distinguer les notes, une pause est necessaire
+    // Il est conseille d'utiliser 30% de la duree de la note
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    // stop the tone playing:
+    noTone(buzzerPin);
+  }
+}
+
+/**
+ * Fait clignoter les LED pour montrer que la phase de detection est lancee
+ */
 void paramLed(){
   int times = 0;
+  
   while(times < 2){
     digitalWrite(greenLedPin, HIGH);
     digitalWrite(redLedPin, HIGH);
+    
     delay(50);
+    
     digitalWrite(greenLedPin, LOW);
     digitalWrite(redLedPin, LOW);
+    
     delay(50);
     times++;
   }
