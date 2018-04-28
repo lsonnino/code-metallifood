@@ -40,7 +40,7 @@
  
 // GPIO
 const byte sensorPin = A0; // La ou on lis la tension
-const byte buttonPin = 4; // Le bouton
+const byte buttonPin = A4; // Le bouton
 const byte redLedPin = 2; // Le LED rouge
 const byte greenLedPin = 3; // Le LED vert
 
@@ -96,7 +96,18 @@ void loop() {
   else if(currentInstruction == RESTART_ITERATIONS){ // Recommence les iterations a 0
     resetIterations();
     pressedButton = true;
-    Serial.println("pressed");
+    Serial.println("Button pressed");
+    digitalWrite(greenLedPin, HIGH);
+    digitalWrite(redLedPin, HIGH);
+    delay(100);
+    digitalWrite(greenLedPin, LOW);
+    digitalWrite(redLedPin, LOW);
+    delay(100);
+    digitalWrite(greenLedPin, HIGH);
+    digitalWrite(redLedPin, HIGH);
+    delay(100);
+    digitalWrite(greenLedPin, LOW);
+    digitalWrite(redLedPin, LOW);
   }
   else { // if iteration == CONTINUE
         // Augmente les iterations et continue
@@ -106,7 +117,7 @@ void loop() {
   // Analyser la detection
   if(detected()){ // Si elle est au dessus de {threshold}
     digitalWrite(redLedPin, HIGH); // Allumer le LED rouge
-    Serial.println("metal");
+    Serial.println("metal  detected");
     while(detected()){ // Tant qu'un metal est detecte
       // Attend un certain temps avant de continuer
       delay(DETECTED_WAIT_TIME);
@@ -117,7 +128,7 @@ void loop() {
   }
   else if(detectionIterations == MAX_DETECTION_ITERATIONS){ // Si aucun metal n'a ete detecte pendant la phase de detection
     digitalWrite(greenLedPin, HIGH); // Allumer le LED vert
-    Serial.println("nothing");
+    Serial.println("nothing detected");
     // Attend un certain temps avant de continuer
     delay(DETECTED_WAIT_TIME);
     // Recommence les iterations
@@ -137,11 +148,13 @@ void loop() {
  */
 boolean isButtonPressed(){
   int iterations = 0;
-  int maxIt = 100;
+  int maxIt = 50;
   int tried = 0;
 
   while(iterations < maxIt){
-    if(digitalRead(buttonPin) == HIGH){
+    int val = analogRead(buttonPin);
+    double valDouble = val*5/1023;
+    if(val >= 1000){
       iterations++;
     }
     else {
@@ -203,7 +216,7 @@ boolean detected(){
   Serial.println(sensorValue);
 
   // Si cette valeur est superieure a la marge, un metal est detecte
-  return sensorValue > THRESHOLD;
+  return sensorValue > 5;
 }
 
 /**
