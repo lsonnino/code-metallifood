@@ -25,7 +25,7 @@
  *      Le LED rouge est branchee sur le pin {redLedPin} (par default PIN 2)
  *      Le LED vert est branchee sur le pin {greenLedPin} (par default PIN 3)
  *      Le pin de detection est le pin {sensorPin} (par default PIN A0)
- *      Le bouton est branche sur le le pin {buttonPin} (par default PIN 4)
+ *      Le bouton est branche sur le le pin {buttonPin} (par default PIN A4)
  *      
  *      Le temps a attendre entre deux analyses du signal est stocke dans la variable globale {WAIT_TIME} (par default egal a 50[ms])
  *      Le temps pendant laquelle un LED reste allumee est stocke dans la variable globale
@@ -45,7 +45,7 @@ const byte redLedPin = 2; // Le LED rouge
 const byte greenLedPin = 3; // Le LED vert
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-const short THRESHOLD = 100; // = 0.5 V
+const short THRESHOLD = 100; // 100 = 0.5 V
 
 // Durees
 const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
@@ -97,17 +97,7 @@ void loop() {
     resetIterations();
     pressedButton = true;
     Serial.println("Button pressed");
-    digitalWrite(greenLedPin, HIGH);
-    digitalWrite(redLedPin, HIGH);
-    delay(100);
-    digitalWrite(greenLedPin, LOW);
-    digitalWrite(redLedPin, LOW);
-    delay(100);
-    digitalWrite(greenLedPin, HIGH);
-    digitalWrite(redLedPin, HIGH);
-    delay(100);
-    digitalWrite(greenLedPin, LOW);
-    digitalWrite(redLedPin, LOW);
+    paramLed();
   }
   else { // if iteration == CONTINUE
         // Augmente les iterations et continue
@@ -122,6 +112,7 @@ void loop() {
       // Attend un certain temps avant de continuer
       delay(DETECTED_WAIT_TIME);
     }
+    delay(DETECTED_WAIT_TIME);
     
     // Recommence les iterations
     resetIterations();
@@ -213,10 +204,9 @@ boolean detected(){
   // Prends la difference de tension entre le pin {sensorPin} et le ground de l'Adruino
   // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
   sensorValue = analogRead(sensorPin);
-  Serial.println(sensorValue);
 
   // Si cette valeur est superieure a la marge, un metal est detecte
-  return sensorValue > 5;
+  return sensorValue > THRESHOLD;
 }
 
 /**
@@ -227,32 +217,16 @@ void wait(){
   delay(WAIT_TIME);
 }
 
-/**
- *  
- *  Donne la distance entre le capteur de proximite et l'obstacle le plus proche
- *  
- **/
- // ============================
- // ============================
-int getDistance(int triggerPin, int echoPin){
-  digitalWrite(triggerPin, LOW);
-  delayMicroseconds(2);
-  // Sets the trigPin on HIGH state for 10 micro seconds
-  digitalWrite(triggerPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(triggerPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  long duration = pulseIn(echoPin, HIGH);
-  // Calculating the distance
-  return duration * 0.034 / 2;
+void paramLed(){
+  int times = 0;
+  while(times < 2){
+    digitalWrite(greenLedPin, HIGH);
+    digitalWrite(redLedPin, HIGH);
+    delay(50);
+    digitalWrite(greenLedPin, LOW);
+    digitalWrite(redLedPin, LOW);
+    delay(50);
+    times++;
+  }
 }
 
-/**
- *  
- *  Renvoie {true} si la distance entre le capteur de proximite et
- *  l'obstacle le plus proche est inferieure a {distance}
- *  
- **/
-boolean isObstacle(int triggerPin, int echoPin, int distance){
-  return getDistance(triggerPin, echoPin) <= distance;
-}
