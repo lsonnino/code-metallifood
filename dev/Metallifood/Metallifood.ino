@@ -115,6 +115,9 @@ const int startupSize = 8;
 void setup() {
   // Vitesse d'execution
   Serial.begin(9600);
+  while (!Serial) {
+    ; // Attend que le Serial port se connecte. Necessaire pour une alimentation USB seulement
+  }
   
   // Configure les GPIO
   pinMode(sensorPin, INPUT); // Le {sensorPin} est une entree
@@ -123,8 +126,11 @@ void setup() {
   pinMode(greenLedPin, OUTPUT); // Le {greenLedPin} est une sortie
   pinMode(buzzerPin, OUTPUT); // Le {buzzerPin} est une sortie
 
+  // Affiche la memoire
+  log();
+
+  // Joue le son de debut
   playSound(startupSound, startupDuration, startupSize);
-  //playSound(detectedSound, detectedDuration);
 }
 
 /**
@@ -164,6 +170,7 @@ void loop() {
     resetIterations();
   }
   else if(detectionIterations == MAX_DETECTION_ITERATIONS){ // Si aucun metal n'a ete detecte pendant la phase de detection
+    write(0);
     digitalWrite(greenLedPin, HIGH); // Allumer le LED vert
     playSound(nothingSound, nothingDuration, nothingSize);
     Serial.println("nothing detected");
@@ -252,8 +259,13 @@ boolean detected(){
   // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
   sensorValue = analogRead(sensorPin);
 
+  boolean detect = sensorValue > THRESHOLD;
+  if(detect){
+    write(sensorValue);
+  }
+
   // Si cette valeur est superieure a la marge, un metal est detecte
-  return sensorValue > THRESHOLD;
+  return detect;
 }
 
 /**

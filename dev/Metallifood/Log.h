@@ -9,8 +9,10 @@
 #include <EEPROM.h>
 
 // methodes
-void nextAddress();
+void setupAddress();
+void next();
 void write(int value);
+void log();
 
 
 #endif // Log

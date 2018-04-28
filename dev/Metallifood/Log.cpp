@@ -9,30 +9,42 @@
  */
 
 #include <EEPROM.h>
+#include <Arduino.h>
 
 // =========================================================
 // =                       VARIABLES                       =
 // =========================================================
-int address = 0; // La derniere valeur stoquee dans la EEPROM
-const int SEPARATOR = 0; // Derniere valeur stoquee dans la EEPROM
-const int SEPARATOR_MULTIPLIER = 8; // Nombre de fois ou le {SEPARATOR} est ecrit
+byte address = 0; // La derniere valeur stoquee dans la EEPROM
 
 // =========================================================
 // =                        METHODES                       =
 // =========================================================
 
 /**
- *  Passe a l'adresse suivante
+ * 
+ * Trouve le premier address
+ * 
+ */
+void setupAddress(){
+  address = EEPROM.read(0);
+}
+
+/**
+ *  
+ *  Si necessaire, oublie le dernier therme pour se souvenir du nouveau
+ *  
  **/
-void nextAddress(){
-  // La prochaine fois, ecrire la valeur dans la case d'apres
-  address++;
-
-  // Si {address} est arrivee au bout, recommencer
-  if (address == EEPROM.length()) {
-
-    address = 0;
+void next(){
+  if(address < EEPROM.length() - 1){
+    address++;
   }
+  else {
+    for(int i=2 ; i < EEPROM.length() - 1 ; i++){
+      EEPROM.write(i, EEPROM.read(i + 1));
+    }
+  }
+
+  EEPROM.write(0, address);
 }
 
 /**
@@ -47,22 +59,30 @@ void write(int value) {
    * comprise entre 0 et 255
    */
   int val = value / 4;
+  
+  // Passe a l'adresse suivant
+  next();
+  
   // Ecrit la valeur dans la EEPROM
   EEPROM.write(address, val);
-  // Passe a l'adresse suivant
-  nextAddress();
+}
 
-  // Ecrit les separateurs
-  int i = 0;
-  while(i < SEPARATOR_MULTIPLIER){
-    EEPROM.write(address, SEPARATOR);
+/**
+ * 
+ * Affiche toute la memoire
+ * 
+ */
+void log(){
+  setupAddress();
+  Serial.print("Address is ");
+  Serial.println(address, DEC);
 
-    // Passe a l'adresse suivant
-    nextAddress();
-  }
-
-  address = address - SEPARATOR_MULTIPLIER;
-  if(address < 0){
-    address = address + EEPROM.length();
+  for(int i=1 ; i <= EEPROM.length() ; i++){
+    byte value = EEPROM.read(i);
+    Serial.print(i);
+    Serial.print("\t");
+    Serial.print(value*4, DEC);
+    Serial.println();
   }
 }
+
