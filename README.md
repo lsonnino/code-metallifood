@@ -1,6 +1,4 @@
 
-# Attention
-Ceci est un code en **développement**. Une version **stable** du code peut être trouvée sur la [Master branch](https://github.com/lsonnino/code-metallifood/tree/master)
 
 # Metallifood
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
