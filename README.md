@@ -22,6 +22,11 @@ Un battement est produit lorque un métal est détecté a une amplitude de l'ord
 Le programme détecte donc une tension supérieure à **0.5[V]** (configurable). Si c'est le cas, il allume la LED. Sinon, il l'éteint.
 Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit ouvert. Lorsque le bouton est appuyé, ces pattes passent en court circuit
 
+## Circuit:
+L'Arduino doit être connecté comme suit:
+![Circuit Arduino](https://github.com/lsonnino/code-metallifood/blob/master/stable/schematic/Metallifood_schematic_export.png "Circuit Arduino")
+Le cable jaune doit être connecté au circuit détécteur de métal. Il doit être alimenté à au moins ```threshold``` [V] (par default **0.5 [V]**) lorsque un métal est détécté.
+
 ## Configuration:
 * La marge de détection est stockée dans la variable globale ```THRESHOLD``` (par default **0.5[V]**).
 * La LED rouge est branchée sur le pin ```redLedPin``` (par default **PIN 2**)
