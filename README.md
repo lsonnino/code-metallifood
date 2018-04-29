@@ -2,7 +2,6 @@
 # Metallifood
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
-
 ## Role:
 Lorsque le bouton est appuyé, commence la détection. La phase de détection dure (par default) deux secondes.
 Si pendant cette phase un métal est détécté, le LED rouge s'allume tant qu'un métal est à portée (ce LED attend (par default) une seconde avant de s'éteindre).
@@ -18,6 +17,11 @@ Cette tension n'est pas exactement de **0[V]** car il reste un bruit générant 
 Un battement est produit lorque un métal est détecté a une amplitude de l'ordre de **2[V]**.
 Le programme détecte donc une tension supérieure à **0.5[V]** (configurable). Si c'est le cas, il allume la LED. Sinon, il l'éteint.
 Enfin, lorsque le bouton n'est appuyé pas, les pattes du bouton sont en circuit ouvert. Lorsque le bouton est appuyé, ces pattes passent en court circuit
+
+## Circuit:
+L'Arduino doit être connecté comme suit:
+![Circuit Arduino](https://github.com/lsonnino/code-metallifood/blob/master/stable/schematic/Metallifood_schematic_export.png "Circuit Arduino")
+Le cable jaune doit être connecté au circuit détécteur de métal. Il doit être alimenté à au moins ```threshold``` [V] (par default **0.5 [V]**) lorsque un métal est détécté.
 
 ## Configuration:
 * La marge de détection est stockée dans la variable globale ```THRESHOLD``` (par default **0.5[V]**).
