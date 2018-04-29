@@ -51,7 +51,7 @@ const byte greenLedPin = 3; // Le LED vert
 const byte buzzerPin = 8; // Le buzzer
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-const short THRESHOLD = 100; // 100 = 0.5 V
+const short THRESHOLD = 150; // 100 = 0.5 V
 
 // Durees
 const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
