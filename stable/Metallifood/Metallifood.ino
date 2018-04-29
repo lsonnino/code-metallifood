@@ -63,6 +63,8 @@ const int MAX_DETECTION_ITERATIONS = DETECTION_TIME / WAIT_TIME; // Le nombre de
 const byte RESTART_ITERATIONS = 1; // Recommencer la phase de detection
 const byte CONTINUE = 0; // Continuer la phase de detection
 const byte NONE = -1; // Ne rien faire
+const byte RESET = 2; // Efface la memoire
+const byte RESET_PRESS = 300; // Temps qu'il faut appuyer pour reset la memoire. Ce temps n'est pas en millisecondes
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
@@ -74,6 +76,9 @@ boolean pressedButton = false; // Si on est en phase de detection
 const int detectionPhaseSound[] = {
   NOTE_B3, NOTE_B3
 };
+const int pressedSound[] = {
+  NOTE_B3
+};
 const int detectedSound[] = {
    NOTE_C4, NOTE_G3, NOTE_C4, NOTE_G3
 };
@@ -83,8 +88,14 @@ const int nothingSound[] = {
 const int startupSound[] = {
    NOTE_E3, NOTE_C4, NOTE_B3, NOTE_C4, NOTE_E4, NOTE_C4, NOTE_A3, NOTE_E3
 };
+const int resetSound[] = {
+   NOTE_A3, NOTE_C4, NOTE_A3, NOTE_C4
+};
 // Notes
 // duree des notes: 4 = noire, 8 = croche, etc.:
+const int pressedDuration[] = {
+  16
+};
 const int detectionPhaseDuration[] = {
   8, 8
 };
@@ -97,12 +108,17 @@ const int nothingDuration[] = {
 const int startupDuration[] = {
   4, 4, 5, 6, 6, 6, 5, 4
 };
+const int resetDuration[] = {
+  12, 12, 12, 12
+};
 
 // Sizes
+const int pressedSize = 1;
 const int detectionPhaseSize = 2;
 const int detectedSize = 4;
 const int nothingSize = 1;
 const int startupSize = 8;
+const int resetSize = 4;
 
 // =========================================================
 // =                        METHODES                       =
@@ -147,8 +163,18 @@ void loop() {
     resetIterations();
     pressedButton = true;
     Serial.println("Button pressed");
+    param();
+  }
+  else if(currentInstruction == RESET){ // Reset la memoire
+    resetIterations();
+    Serial.print("Resetting ... ");
     paramLed();
-    playSound(detectionPhaseSound, detectionPhaseDuration, detectionPhaseSize);
+    playSound(resetSound, resetDuration, resetSize);
+    clear();
+    Serial.println("done");
+    log();
+    param();
+    return;
   }
   else { // if iteration == CONTINUE
         // Augmente les iterations et continue
@@ -191,29 +217,36 @@ void loop() {
  * Cette methode corrige ce probleme
  * 
  */
-boolean isButtonPressed(){
+int buttonPress(){
   int iterations = 0;
   int maxIt = 50;
   int tried = 0;
+  int pressed = 0;
 
-  while(iterations < maxIt){
+  while(tried < maxIt && pressed < RESET_PRESS){
     int val = analogRead(buttonPin);
     double valDouble = val*5/1023;
+    
     if(val >= 1000){
       iterations++;
     }
     else {
       tried++;
-      if(tried > maxIt){
-        return false;
-      }
       iterations = 0;
+    }
+
+    if(iterations >= maxIt){
+      pressed++;
+      iterations = 0;
+      if(pressed == RESET_PRESS/2){
+        buttonPressedSignal();
+      }
     }
 
     delay(1);
   }
 
-  return true;
+  return pressed;
 }
 
 /**
@@ -224,8 +257,14 @@ boolean isButtonPressed(){
  *    {NONE} si rien ne doit etre  fait
  */
 byte instruction(){
+  int pressed = buttonPress();
+
+  // Si le boutin est appuye longtemps, efface la memoire
+  if(pressed >= RESET_PRESS){
+    return RESET;
+  }
   // Si le boutin est appuye, recommence la phase de detection
-  if(isButtonPressed()){
+  else if(pressed > 0){
     return RESTART_ITERATIONS;
   }
   // Sinon,
@@ -299,20 +338,36 @@ void playSound(int melody[], int noteDurations[], int melodySize){
   }
 }
 
+void buttonPressedSignal(){
+  pressedLed();
+  playSound(pressedSound, pressedDuration, pressedSize);
+}
+
+/**
+ * Joue le son des parametre et allume les led en consequence
+ */
+void param(){
+  paramLed();
+  playSound(detectionPhaseSound, detectionPhaseDuration, detectionPhaseSize);
+}
+
 /**
  * Fait clignoter les LED pour montrer que la phase de detection est lancee
  */
+void pressedLed(){
+  digitalWrite(greenLedPin, HIGH);
+  digitalWrite(redLedPin, HIGH);
+  
+  delay(50);
+  
+  digitalWrite(greenLedPin, LOW);
+  digitalWrite(redLedPin, LOW);
+}
 void paramLed(){
   int times = 0;
   
   while(times < 2){
-    digitalWrite(greenLedPin, HIGH);
-    digitalWrite(redLedPin, HIGH);
-    
-    delay(50);
-    
-    digitalWrite(greenLedPin, LOW);
-    digitalWrite(redLedPin, LOW);
+    pressedLed();
     
     delay(50);
     times++;
