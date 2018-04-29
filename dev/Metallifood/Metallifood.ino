@@ -45,14 +45,13 @@
  
 // GPIO
 const byte sensorPin = A0; // La ou on lis la tension
-const byte buttonPin = A1; // Le bouton
-const byte redLedPin = A2; // Le LED rouge
-const byte greenLedPin = A3; // Le LED vert
-const byte blueLedPin = A4; // Le LED bleu
+const byte buttonPin = A4; // Le bouton
+const byte redLedPin = 2; // Le LED rouge
+const byte greenLedPin = 3; // Le LED vert
 const byte buzzerPin = 8; // Le buzzer
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
-const short THRESHOLD = 100; // 100 = 0.5 V
+const short THRESHOLD = 150; // 100 = 0.5 V
 
 // Durees
 const int WAIT_TIME = 50; // Temps a attendre avant de recommencer (en millisecondes)
@@ -104,16 +103,6 @@ const int detectionPhaseSize = 2;
 const int detectedSize = 4;
 const int nothingSize = 1;
 const int startupSize = 8;
-
-// Colors
-const byte COLOR_BLACK = 0b000;
-const byte COLOR_RED = 0b100;
-const byte COLOR_GREEN = 0b010;
-const byte COLOR_BLUE = 0b001;
-const byte COLOR_MAGENTA = 0b101;
-const byte COLOR_CYAN = 0b011;
-const byte COLOR_YELLOW = 0b110;
-const byte COLOR_WHITE = 0b111;
 
 // =========================================================
 // =                        METHODES                       =
@@ -317,24 +306,16 @@ void paramLed(){
   int times = 0;
   
   while(times < 2){
-    setColor(0, 0, 255);
+    digitalWrite(greenLedPin, HIGH);
+    digitalWrite(redLedPin, HIGH);
     
     delay(50);
     
-    setColor(0, 255, 255);
+    digitalWrite(greenLedPin, LOW);
+    digitalWrite(redLedPin, LOW);
     
     delay(50);
     times++;
   }
-}
-
-void setColor(int red, int green, int blue)
-{
-  red = 255 - red;
-    green = 255 - green;
-    blue = 255 - blue;
-  analogWrite(redLedPin, red);
-  analogWrite(greenLedPin, green);
-  analogWrite(blueLedPin, blue);  
 }
 
