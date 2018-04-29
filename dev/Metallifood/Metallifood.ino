@@ -45,9 +45,10 @@
  
 // GPIO
 const byte sensorPin = A0; // La ou on lis la tension
-const byte buttonPin = A4; // Le bouton
+const byte buttonPin = A1; // Le bouton
 const byte redLedPin = 2; // Le LED rouge
 const byte greenLedPin = 3; // Le LED vert
+const byte bueLedPin = 4; // Le LED bleu
 const byte buzzerPin = 8; // Le buzzer
 
 // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
@@ -306,8 +307,8 @@ void paramLed(){
   int times = 0;
   
   while(times < 2){
-    digitalWrite(greenLedPin, HIGH);
-    digitalWrite(redLedPin, HIGH);
+    digitalWrite(greenLedPin, !bitRead(0b100, 1));
+    digitalWrite(redLedPin, !bitRead(0b100, 2));
     
     delay(50);
     
