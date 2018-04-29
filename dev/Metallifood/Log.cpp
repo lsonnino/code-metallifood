@@ -77,7 +77,7 @@ void log(){
   Serial.print("Address is ");
   Serial.println(address, DEC);
 
-  for(int i=1 ; i <= EEPROM.length() ; i++){
+  for(int i=1 ; i <= address ; i++){
     byte value = EEPROM.read(i);
     Serial.print(i);
     Serial.print("\t");
