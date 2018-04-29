@@ -1,14 +1,15 @@
-
 # Metallifood
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
-## Role:
+
+## Notice:
 Lorsque le bouton est appuyé, commence la détection. La phase de détection dure (par default) deux secondes.
 Si pendant cette phase un métal est détécté, le LED rouge s'allume tant qu'un métal est à portée (ce LED attend (par default) une seconde avant de s'éteindre).
 Si le bouton est appuyé de nouveau, relance la phase de détection.
 Si pendant ce temps aucun métal n'à été détécté, le LED vert s'allume et attend (par default) une seconde avant de s'éteindre.
 Un son est également joué pour appuyer les signaux lumineux.
 Un historique peut etre retrouve dans la EEPROM (memoire a long therme) de l'Arduino et sera affiche au demarrage.
+En gardant le boutton appuyé plus longtemps, l'Arduino entre en mode "reset" et la memoire de l'Arduino est effacée
 
 ## Fonctionnement:
 Lorsque un métal est détecté, un battement est produit.
