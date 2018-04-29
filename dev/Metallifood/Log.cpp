@@ -28,6 +28,14 @@ byte address = 0; // La derniere valeur stoquee dans la EEPROM
 void setupAddress(){
   address = EEPROM.read(0);
 }
+/**
+ * 
+ * Sauvegarde l'address actuelle
+ * 
+ */
+void writeAddress(){
+  EEPROM.write(0, address);
+}
 
 /**
  *  
@@ -44,7 +52,7 @@ void next(){
     }
   }
 
-  EEPROM.write(0, address);
+  writeAddress();
 }
 
 /**
@@ -84,5 +92,21 @@ void log(){
     Serial.print(value*4, DEC);
     Serial.println();
   }
+}
+
+/**
+ * 
+ * Efface completement l'historique
+ * 
+ */
+void clear(){
+  address = 0;
+
+  for(int i=1 ; i < EEPROM.length() ; i++){
+     write(0);
+  }
+  
+  address = 0;
+  writeAddress();
 }
 
