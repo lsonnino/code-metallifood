@@ -1,5 +1,5 @@
 # Metallifood
-[![license](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](https://github.com/asonnino/code-metallifood/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](https://github.com/lsonnino/code-metallifood/blob/master/LICENSE)
 
 Ce code est le code de l'Adruino contenu dans le paquet Metallifood
 
