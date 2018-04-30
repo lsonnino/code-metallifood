@@ -8,6 +8,10 @@
 
 #include <EEPROM.h>
 
+// Atmel guarantees at least 100,000 write cycles
+// protect the memory from excessive writing
+//#define WRITE_DISABLE
+
 // methodes
 void setupAddress();
 void writeAddress();

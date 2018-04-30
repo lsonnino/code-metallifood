@@ -34,7 +34,9 @@ void setupAddress(){
  * 
  */
 void writeAddress(){
-  EEPROM.write(0, address);
+  #ifdef WRITE_DISABLE
+    EEPROM.write(0, address);
+  #endif
 }
 
 /**
@@ -48,7 +50,9 @@ void next(){
   }
   else {
     for(int i=2 ; i < EEPROM.length() - 1 ; i++){
-      EEPROM.write(i, EEPROM.read(i + 1));
+      #ifdef WRITE_DISABLE
+        EEPROM.write(i, EEPROM.read(i + 1));
+      #endif
     }
   }
 
@@ -72,7 +76,9 @@ void write(int value) {
   next();
   
   // Ecrit la valeur dans la EEPROM
-  EEPROM.write(address, val);
+  #ifdef WRITE_DISABLE
+    EEPROM.write(address, val);
+  #endif
 }
 
 /**
