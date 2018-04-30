@@ -1,6 +1,28 @@
+/*
+ * Copyright 2018 Adam Abazi, Lionel Boils, Jean-Baptiste Della Faille,
+ * Maxime Lemerle, Lorenzo Sonnino, Corentin Thaon
+ * 
+ * This file is part of METALIFOOD.
+ * 
+ * METALIFOOD is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * METALIFOOD is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*************************************************
  * Public Constants
  *************************************************/
+#ifndef PITCHES_H
+#define PITCHES_H
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -91,4 +113,6 @@
 #define NOTE_CS8 4435
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
+
+#endif // PITCHES_H
 
