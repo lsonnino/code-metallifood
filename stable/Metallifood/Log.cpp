@@ -1,23 +1,3 @@
-/*
- * Copyright 2018 Adam Abazi, Lionel Boils, Jean-Baptiste Della Faille,
- * Maxime Lemerle, Lorenzo Sonnino, Corentin Thaon
- * 
- * This file is part of METALIFOOD.
- * 
- * METALIFOOD is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * METALIFOOD is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 /**
  *  ===================
  *  === METALLIFOOD === 
@@ -54,9 +34,7 @@ void setupAddress(){
  * 
  */
 void writeAddress(){
-  #ifndef WRITE_DISABLE
-    EEPROM.write(0, address);
-  #endif
+  EEPROM.write(0, address);
 }
 
 /**
@@ -70,9 +48,7 @@ void next(){
   }
   else {
     for(int i=2 ; i < EEPROM.length() - 1 ; i++){
-      #ifndef WRITE_DISABLE
-        EEPROM.write(i, EEPROM.read(i + 1));
-      #endif
+      EEPROM.write(i, EEPROM.read(i + 1));
     }
   }
 
@@ -96,9 +72,7 @@ void write(int value) {
   next();
   
   // Ecrit la valeur dans la EEPROM
-  #ifndef WRITE_DISABLE
-    EEPROM.write(address, val);
-  #endif
+  EEPROM.write(address, val);
 }
 
 /**
