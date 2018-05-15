@@ -68,6 +68,7 @@ const byte RESET_PRESS = 300; // Temps qu'il faut appuyer pour reset la memoire.
 
 // Variables
 int sensorValue = 0; // Tension (entre 0 et 1023 correspondant a une tension entre 0V et 5V)
+int tmpSensorValue1 = 0, tmpSensorValue2; // Aide a la detection
 int detectionIterations = 0; // Le nombre de fois que la fonction {loop()} est appellee
 boolean pressedButton = false; // Si on est en phase de detection
 
@@ -297,6 +298,15 @@ boolean detected(){
   // Prends la difference de tension entre le pin {sensorPin} et le ground de l'Adruino
   // analogRead donne une valeur entre 0 et 1023 (0 = 0V et 1023 = 5V)
   sensorValue = analogRead(sensorPin);
+  tmpSensorValue1 = analogRead(sensorPin);
+  tmpSensorValue2 = analogRead(sensorPin);
+
+  if(tmpSensorValue1 < tmpSensorValue2){
+    tmpSensorValue1 = tmpSensorValue2;
+  }
+  if(sensorValue < tmpSensorValue1){
+    sensorValue = tmpSensorValue1;
+  }
 
   boolean detect = sensorValue > THRESHOLD;
   if(detect){
